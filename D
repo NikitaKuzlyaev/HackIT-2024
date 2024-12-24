@@ -1,1 +1,39 @@
+def make_death():
+    # не спрашивайте зачем эта функция
+    a = 1 / 0
+    return
 
+
+def check(a, b, st):
+    res = st
+    while b > a:
+        res += 1 + b % 2
+        b = b >> 1
+
+    if b != a:
+        return -1
+    return res
+
+
+def solve():
+    m, n = map(int, input().split())
+
+    if n == m:
+        print(0)
+        return
+
+    vars = [check(m, n, 0), check(m + 1, n, 1)]
+
+    if max(vars) == -1:
+        print(-1)
+    else:
+        if min(vars) != -1:
+            print(min(vars))
+        else:
+            print(max(vars))
+
+    return
+
+
+if __name__ == '__main__':
+    solve()
