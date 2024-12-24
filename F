@@ -1,0 +1,45 @@
+import sys
+
+INF = 1 << 90
+
+
+def solve():
+    n, k = map(int, input().split())
+    n += 1
+    a = [-INF] + list(map(int, input().split()))
+
+    dp = [[INF for i in range(k + 1)] for i in range(n)]
+
+    dp[0][0] = 0
+    for i in range(1, n):
+        dp[i][0] = a[i] + dp[i - 1][0]
+
+    for i in range(2, n):
+        for j in range(1, min(k + 1, i)):
+            dp[i][j] = min(dp[i][j], a[i] + dp[i - 1][j])
+
+            mx_between_i_and_p = 0
+            for p in range(i - 1, -1, -1):
+
+                if mx_between_i_and_p <= max(a[i], a[p]) and j - (i - p - 1) >= 0:
+                    dp[i][j] = min(dp[i][j], a[i] + dp[p][j - (i - p - 1)])
+
+                mx_between_i_and_p = max(mx_between_i_and_p, a[p])
+
+    best = INF
+
+    mx_on_suff = 0
+    del_on_right = 0
+    for i in range(n - 1, 0, -1):
+        if a[i] >= mx_on_suff and k - del_on_right >= 0:
+            best = min(best, dp[i][k - del_on_right])
+
+        del_on_right += 1
+        mx_on_suff = max(mx_on_suff, a[i])
+
+    print(best)
+    return
+
+
+if __name__ == '__main__':
+    solve()
