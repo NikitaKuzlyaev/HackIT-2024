@@ -1,0 +1,41 @@
+import sys
+
+mod = 10 ** 9 + 7
+
+# таблица факториалов по заданному модулю
+table = [1 for i in range(2010)]
+for i in range(2, 2010):
+    table[i] = (table[i - 1] * i) % mod
+table[0] = 1
+reverse_table = [pow(table[i], mod - 2, mod) for i in range(2010)]
+
+
+def solve():
+    n = int(sys.stdin.readline()) * 2
+
+    # dp[i] --- сколько есть вариантов соединить ВСЕ i точек в пары верхними дугами
+    dp = [0] * (n + 1)
+    dp[0] = 1
+    dp[1] = 0
+    dp[2] = 1
+
+    for dots in range(4, n + 1, 2):
+        res = 0
+        for connect_with_first in range(2, dots + 1):
+            res += dp[connect_with_first - 2] * dp[dots - connect_with_first]
+        dp[dots] = res % mod
+
+    res = 0
+    # переберем число верхних точек
+    for w in range(0, n + 1, 2):
+        # вариантов выбрать эти w точек
+        v1 = table[n] * reverse_table[w] * reverse_table[n - w]
+        v1 = v1 % mod
+        res = (res + (v1 * dp[w] * dp[n - w])) % mod
+
+    print(res)
+    return
+
+
+if __name__ == '__main__':
+    solve()
