@@ -1,0 +1,26 @@
+import sys
+
+
+def solve():
+    n = int(sys.stdin.readline())
+    s = str(sys.stdin.readline().strip())
+    t = str(sys.stdin.readline().strip())
+
+    v1 = t.count('*') + n  # провалить и ввести заново
+    v2 = (n - t.count('*')) + n  # стереть и ввести заново
+
+    pref = 0
+    for i in range(n):
+        if s[i] == t[i]:
+            pref += 1
+        else:
+            break
+    # стереть до максимально совпадающего префикса и ввести до конца
+    v3 = (n - t.count('*') - pref) + (n - pref)
+
+    print(min(v1, v2, v3))
+    return
+
+
+if __name__ == '__main__':
+    solve()
