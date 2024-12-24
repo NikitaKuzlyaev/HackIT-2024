@@ -1,0 +1,112 @@
+import sys
+
+# да. треш.
+# можно сделать в два раза короче 
+
+def solve():
+    f = [list(map(int, input().split())) for i in range(9)]
+
+    # checking
+    not_zero = []
+    for i in range(9):
+        for j in range(9):
+            if f[i][j] != 0:
+                not_zero.append([i, j])
+
+    x1, y1 = not_zero[0]
+    x2, y2 = not_zero[1]
+
+    # подойдет любое судоку - потом сделаем маппинг
+    s = [[6, 8, 2, 3, 4, 9, 7, 5, 1],
+         [9, 7, 5, 8, 1, 2, 4, 3, 6],
+         [4, 3, 1, 5, 7, 6, 8, 2, 9],
+         [2, 4, 7, 1, 5, 3, 9, 6, 8],
+         [5, 1, 6, 2, 9, 8, 3, 7, 4],
+         [3, 9, 8, 7, 6, 4, 2, 1, 5],
+         [7, 6, 9, 4, 3, 1, 5, 8, 2],
+         [1, 2, 3, 9, 8, 5, 6, 4, 7],
+         [8, 5, 4, 6, 2, 7, 1, 9, 3]]
+
+    def swap_col(c1, c2):
+        for i in range(9):
+            s[i][c1], s[i][c2] = s[i][c2], s[i][c1]
+
+    def swap_row(c1, c2):
+        for i in range(9):
+            s[c1][i], s[c2][i] = s[c2][i], s[c1][i]
+
+    def make_map(x, y):
+        for i in range(9):
+            for j in range(9):
+                if s[i][j] == x:
+                    s[i][j] = y
+                else:
+                    if s[i][j] == y:
+                        s[i][j] = x
+
+    if f[x1][y1] == f[x2][y2]:
+        if x1 == x2 or y1 == y2:
+            print(-1)
+            return
+
+        c1 = 3 * (y1 // 3) + x1 // 3
+        c2 = 3 * (y2 // 3) + x2 // 3
+
+        if c1 == c2:
+            print(-1)
+            return
+
+        nz1, nz2 = f[x1][y1], f[x2][y2]
+
+        if s[x2][y2] != s[x1][y1]:
+            flag = False
+            for x in range(3 * (x2 // 3), 3 * (x2 // 3) + 3):
+                if flag:
+                    break
+                for y in range(3 * (y2 // 3), 3 * (y2 // 3) + 3):
+                    if s[x][y] == s[x1][y1]:
+                        swap_row(x, x2)
+                        swap_col(y, y2)
+                        flag = True
+                        break
+
+        make_map(s[x1][y1], nz1)
+
+    else:
+        nz1, nz2 = f[x1][y1], f[x2][y2]
+
+        if s[x1][y1] == s[x2][y2]:
+            x = 3 * (x1 // 3)
+            if x == x1:
+                x += 1
+            swap_row(x, x1)
+
+        if s[x1][y1] == nz2 and s[x2][y2] == nz1:
+            make_map(s[x1][y1], nz1)
+
+        else:
+            if s[x2][y2] != nz2:
+                make_map(s[x2][y2], nz2)
+
+            if s[x2][y2] != nz2:
+                flag = False
+                for x in range(3 * (x2 // 3), 3 * (x2 // 3) + 3):
+                    if flag:
+                        break
+                    for y in range(3 * (y2 // 3), 3 * (y2 // 3) + 3):
+                        if s[x][y] == nz2:
+                            swap_row(x, x2)
+                            swap_col(y, y2)
+                            flag = True
+                            break
+
+            if s[x1][y1] != nz1:
+                make_map(s[x1][y1], nz1)
+
+    for i in range(9):
+        print(*s[i])
+    return
+
+
+if __name__ == '__main__':
+    solve()
