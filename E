@@ -1,0 +1,92 @@
+import sys
+
+
+# я потерял более простое решение.
+# но это через сравнение тангенсов дробями более устойчивое к входным числам
+def solve():
+    n, k = map(int, sys.stdin.readline().split())
+    a = list(map(int, sys.stdin.readline().split()))
+
+    k -= 1
+    res = 1
+    visible = []
+
+    # go left
+    dx, dy = 0, -1
+    for i in range(k - 1, -1, -1):
+        xx, yy = abs(k - i), a[i] - a[k]
+
+        if yy == 0:
+            if dy == 0:
+                res += 1
+                visible.append(i + 1)
+            elif dy > 0:
+                continue
+            else:
+                res += 1
+                visible.append(i + 1)
+                dx, dy = xx, yy
+
+        elif yy > 0:
+            if dy <= 0:
+                res += 1
+                visible.append(i + 1)
+                dx, dy = xx, yy
+            else:
+                if dy * abs(xx) <= yy * abs(dx):
+                    res += 1
+                    visible.append(i + 1)
+                    dx, dy = xx, yy
+        else:
+            if dy >= 0:
+                continue
+            else:
+                if abs(dx) * abs(yy) <= abs(dy) * abs(xx):
+                    res += 1
+                    visible.append(i + 1)
+                    dx, dy = xx, yy
+
+    visible = visible[::-1]
+    visible.append(k + 1)
+
+    # go right
+    dx, dy = 0, -1
+    for i in range(k + 1, n):
+        xx, yy = abs(k - i), a[i] - a[k]
+
+        if yy == 0:
+            if dy == 0:
+                res += 1
+                visible.append(i + 1)
+            elif dy > 0:
+                continue
+            else:
+                res += 1
+                visible.append(i + 1)
+                dx, dy = xx, yy
+
+        elif yy > 0:
+            if dy <= 0:
+                res += 1
+                visible.append(i + 1)
+                dx, dy = xx, yy
+            else:
+                if dy * abs(xx) <= yy * abs(dx):
+                    res += 1
+                    visible.append(i + 1)
+                    dx, dy = xx, yy
+        else:
+            if dy >= 0:
+                continue
+            else:
+                if abs(dx) * abs(yy) <= abs(dy) * abs(xx):
+                    res += 1
+                    visible.append(i + 1)
+                    dx, dy = xx, yy
+
+    sys.stdout.write(str(res) + '\n')
+    return
+
+
+if __name__ == '__main__':
+    solve()
