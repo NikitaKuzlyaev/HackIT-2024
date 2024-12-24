@@ -1,0 +1,50 @@
+import sys
+
+
+def solve():
+    ll, rr = map(int, input().split())
+
+    d = [45, 205, 795, 955]
+    res = 0
+    rr += 1
+    
+    # ищем такое максимальное s, что s**2 < rr
+    l, r = 0, 10 ** 10
+    while l <= r:
+        m = (l + r) >> 1
+        s = m * 1000 + 45
+        if s ** 2 >= rr:
+            r = m - 1
+        else:
+            l = m + 1
+
+    # подгон
+    res += 4 * max(0, r)
+    for i in d:
+        s = (r * 1000 + i) ** 2
+        if s < rr:
+            res += 1
+
+    # то же самое для ll
+    l, r = 0, 10 ** 10
+    while l <= r:
+        m = (l + r) >> 1
+        s = m * 1000 + 45
+        if s ** 2 >= ll:
+            r = m - 1
+        else:
+            l = m + 1
+
+    # подгон 2
+    res -= 4 * max(0, r)
+    for i in d:
+        s = (r * 1000 + i) ** 2
+        if s < ll:
+            res -= 1
+
+    print(res)
+    return
+
+
+if __name__ == '__main__':
+    solve()
