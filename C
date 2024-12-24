@@ -1,0 +1,48 @@
+import sys
+
+
+def solve():
+    n, m = map(int, sys.stdin.readline().split())
+    a = list(map(int, sys.stdin.readline().split()))
+    b = list(map(int, sys.stdin.readline().split()))
+
+    k = int(sys.stdin.readline())
+
+    keys = set()
+
+    aa = {}
+    for i in range(n):
+        if a[i] not in aa:
+            aa[a[i]] = 0
+        aa[a[i]] += 1
+        keys.add(a[i])
+
+    bb = {}
+    for i in range(m):
+        if b[i] not in bb:
+            bb[b[i]] = 0
+        bb[b[i]] += 1
+        keys.add(b[i])
+
+    res = 0
+    for key in keys:
+        diff = 0
+        if key in aa:
+            diff += aa[key]
+        if key in bb:
+            diff -= bb[key]
+        res += abs(diff)
+
+    if res <= k:
+        if res % 2 == k % 2:
+            print('YES')
+        else:
+            print('NO')
+    else:
+        print('NO')
+
+    return
+
+
+if __name__ == '__main__':
+    solve()
