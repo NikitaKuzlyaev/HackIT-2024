@@ -1,0 +1,39 @@
+import sys
+
+
+# обычный дебаг. забудьте...
+def destroy_pc():
+    a = 1 / 0
+    return
+
+
+def solve():
+    s = str(input())
+
+    res = set()
+    res.add(0)
+
+    stack = []
+    cur_node = 0
+    for i in s:
+        if i == 'L':
+            cur_node = cur_node * 2 + 1
+        elif i == 'R':
+            cur_node = cur_node * 2 + 2
+        elif i == 'l':
+            stack.append(cur_node)
+            cur_node = cur_node * 2 + 1
+        elif i == 'r':
+            cur_node = stack.pop() * 2 + 2
+        else:
+            destroy_pc()
+
+        res.add(cur_node)
+
+    res = sorted(list(res))
+    sys.stdout.write(' '.join(map(str, res)))
+    return
+
+
+if __name__ == '__main__':
+    solve()
